@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: art
-        uses: vyncint/mossaic/action@v0.2.0
+        uses: vyncint/mossaic/action@v0.5.0
         with:
           text: VYNCINT
           year: "2026"
@@ -38,11 +38,22 @@ jobs:
           # `behind` fails the job when today is a letter day and is short, so
           # the failure notification you already get does the reminding.
           fail-on: never
+          # Which mossaic release does the tracking. The default, latest,
+          # follows crates.io; pin a number ("0.5.0") to freeze it. Left on
+          # latest deliberately: this repository is where a mossaic release
+          # gets exercised against a real contribution graph, so following
+          # the newest published version is the point of it.
+          # version: latest
 
       # ----------------------------------------------------------------- issue
       # No secrets, nothing to sign up for. Open one issue in this repository
       # and put its number here.
       - name: Comment on the tracking issue
+        # Only when today is actually short of its target. Commenting on a
+        # day that needs nothing turns the tracking issue into a feed you
+        # stop reading, which is the one failure mode a reminder cannot
+        # survive.
+        if: steps.art.outputs.today-short != '0'
         env:
           GH_TOKEN: ${{ github.token }}
           BODY: ${{ steps.art.outputs.markdown }}
