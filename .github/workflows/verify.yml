@@ -1,0 +1,204 @@
+name: verify
+
+# Exercises the mossaic action against the newest **published** release, on
+# input combinations the daily tracker never reaches.
+#
+# `track.yml` runs one plan, once a day, and only ever proves that plan still
+# works. This runs several — a background shade and none, a top row that is
+# not the default, a year with no contributions in it at all — and checks the
+# report against itself rather than against a recorded string, because the
+# numbers legitimately change every day this repository is committed to.
+#
+# The cross-check is the point: every flat output is derived from the same
+# report as `json`, so the two disagreeing is a bug in the action's output
+# plumbing that no unit test in mossaic would see. That plumbing is 20
+# `value:` expressions, which is exactly the sort of thing that rots quietly
+# when an output is renamed.
+#
+# Always the published crate, from crates.io, never a build of a sibling
+# checkout — a green run here has to mean "what a user installs today works".
+
+on:
+  schedule:
+    - cron: "41 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: mossaic version to verify, or "latest"
+        required: false
+        default: latest
+  # So a mossaic release can trigger this directly:
+  #   gh api repos/vyncint/contribution-art/dispatches -f event_type=tool-published
+  repository_dispatch:
+    types: [tool-published]
+  pull_request:
+    paths:
+      - ".github/workflows/verify.yml"
+      - ".github/workflows/track.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  outputs-agree:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: the live plan
+            text: VYNCINT
+            year: "2026"
+            start-week: "6"
+            background: "1"
+            top: "1"
+          - name: no background
+            text: VYNCINT
+            year: "2026"
+            start-week: "6"
+            background: "0"
+            top: "1"
+          - name: full week, brighter field
+            text: HELLO
+            year: "2026"
+            start-week: "2"
+            background: "2"
+            top: "0"
+          - name: a year with nothing in it
+            text: AB
+            year: "2015"
+            start-week: "1"
+            background: "0"
+            top: "1"
+    steps:
+      - id: art
+        uses: vyncint/mossaic/action@v0.5.0
+        with:
+          text: ${{ matrix.text }}
+          year: ${{ matrix.year }}
+          start-week: ${{ matrix.start-week }}
+          background: ${{ matrix.background }}
+          top: ${{ matrix.top }}
+          timezone: Asia/Ho_Chi_Minh
+          fail-on: never
+          version: ${{ inputs.version || 'latest' }}
+
+      - name: The flat outputs agree with the JSON
+        env:
+          JSON: ${{ steps.art.outputs.json }}
+          VERDICT: ${{ steps.art.outputs.verdict }}
+          BRIGHT: ${{ steps.art.outputs.bright }}
+          LETTERS: ${{ steps.art.outputs.letters }}
+          OWING_DAYS: ${{ steps.art.outputs.owing-days }}
+          OWING_COMMITS: ${{ steps.art.outputs.owing-commits }}
+          HOLES: ${{ steps.art.outputs.holes }}
+          TODAY_SHORT: ${{ steps.art.outputs.today-short }}
+          TODAY_KIND: ${{ steps.art.outputs.today-kind }}
+          TOMORROW_NEED: ${{ steps.art.outputs.tomorrow-need }}
+          FIELD_LEVEL: ${{ steps.art.outputs.field-level }}
+          FIELD_DAYS: ${{ steps.art.outputs.field-days }}
+          LEGIBILITY: ${{ steps.art.outputs.legibility }}
+          SEPARATION: ${{ steps.art.outputs.separation }}
+          WANT_FIELD: ${{ matrix.background }}
+        run: |
+          set -uo pipefail
+          test -n "$JSON" || { echo "::error::the json output is empty"; exit 1; }
+          printf '%s' "$JSON" | jq -e . >/dev/null || {
+            echo "::error::the json output does not parse"; exit 1; }
+
+          fail=0
+          # Re-derive each flat output from the report with the same
+          # expression the action uses. A rename on either side shows up here
+          # as a disagreement rather than as an empty string in somebody's
+          # Slack message six weeks later.
+          check() {
+            name=$1 expr=$2 flat=$3
+            from_json=$(printf '%s' "$JSON" | jq -r "$expr")
+            if [ "$from_json" != "$flat" ]; then
+              echo "::error::output '$name' says '$flat'; the report says '$from_json'"
+              fail=1
+            fi
+          }
+
+          check verdict         '.verdict'                       "$VERDICT"
+          check bright          '.bright | tostring'             "$BRIGHT"
+          check letters         '.letters | tostring'            "$LETTERS"
+          check owing-days      '.owing_days | tostring'         "$OWING_DAYS"
+          check owing-commits   '.owing_commits | tostring'      "$OWING_COMMITS"
+          check holes           '.holes | tostring'              "$HOLES"
+          check today-short     '(.today.short // 0) | tostring' "$TODAY_SHORT"
+          check today-kind      '.today.kind // "outside"'       "$TODAY_KIND"
+          check tomorrow-need   '(.tomorrow.need // 0) | tostring' "$TOMORROW_NEED"
+          check field-level     '.field_level | tostring'        "$FIELD_LEVEL"
+          check field-days      '.field_days | tostring'         "$FIELD_DAYS"
+          check legibility      '.legibility'                    "$LEGIBILITY"
+          check separation      '.separation | floor | tostring' "$SEPARATION"
+
+          # Documented enumerations.
+          case "$VERDICT" in
+            drawn|reachable|holed) ;;
+            *) echo "::error::verdict '$VERDICT' is not drawn/reachable/holed"; fail=1 ;;
+          esac
+          case "$LEGIBILITY" in
+            clear|readable|faint) ;;
+            *) echo "::error::legibility '$LEGIBILITY' is not clear/readable/faint"; fail=1 ;;
+          esac
+
+          # The field level is an input echoed back, so a mismatch is plumbing.
+          [ "$FIELD_LEVEL" = "$WANT_FIELD" ] \
+            || { echo "::error::field-level is '$FIELD_LEVEL' for background '$WANT_FIELD'"; fail=1; }
+
+          # No background drawn means no field days to owe.
+          if [ "$FIELD_LEVEL" = "0" ] && [ "$FIELD_DAYS" != "0" ]; then
+            echo "::error::field-days is $FIELD_DAYS with no field drawn"
+            fail=1
+          fi
+
+          # "Under 20 is faint; 35 and up is plainly two colours."
+          if [ "$FIELD_LEVEL" != "0" ]; then
+            awk -v s="$SEPARATION" -v l="$LEGIBILITY" 'BEGIN {
+              if (s == "") { print "::error::separation is empty with a field drawn"; exit 1 }
+              if (s < 20 && l != "faint") {
+                printf "::error::separation %s is under 20 but legibility says %s\n", s, l; exit 1
+              }
+              if (s >= 35 && l == "faint") {
+                printf "::error::separation %s is 35 or over but legibility says faint\n", s; exit 1
+              }
+            }' || fail=1
+          fi
+
+          exit "$fail"
+
+      - name: The report renders
+        env:
+          MARKDOWN: ${{ steps.art.outputs.markdown }}
+          HEADLINE: ${{ steps.art.outputs.headline }}
+        run: |
+          set -euo pipefail
+          test -n "$HEADLINE" || { echo "::error::empty headline"; exit 1; }
+          test -n "$MARKDOWN" || { echo "::error::empty markdown"; exit 1; }
+          { echo "## ${{ matrix.name }}"; echo; printf '%s\n' "$MARKDOWN"; } \
+            >> "$GITHUB_STEP_SUMMARY"
+
+  report:
+    name: report
+    runs-on: ubuntu-latest
+    needs: [outputs-agree]
+    if: failure() && github.event_name != 'pull_request'
+    steps:
+      - name: Open one issue per failing run
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="verify: the mossaic action does not hold against its newest release"
+          existing=$(gh issue list --repo "$REPO" --state open --search "$title in:title" \
+            --json number --jq '.[0].number // empty')
+          [ -n "$existing" ] && { echo "already reported as #$existing"; exit 0; }
+          gh issue create --repo "$REPO" --title "$title" --body "$(printf '%s\n\n- run: %s\n\n%s\n' \
+            'The scheduled verification of the mossaic action against its newest published release failed.' \
+            "$RUN_URL" \
+            'Either an output was renamed without the action-side plumbing following, or a documented enumeration or threshold moved. The job log names the disagreeing field.')"
