@@ -1,7 +1,7 @@
 # Tracks a contribution-art plan daily and comments the report on issue #1.
 #
 # The plan is a heart across the closing weeks of 2026: seven rows by
-# thirteen columns, drawn from Sunday 23 August to 21 November. See
+# eleven columns, drawn from Sunday 30 August to 14 November. See
 # heart.art, which is the picture itself and readable as one.
 #
 # Copied from vyncint/mossaic action/track.example.yml with the `with:` block
@@ -46,13 +46,20 @@ jobs:
           # weekend included, which the 5x5 font cannot do.
           matrix: heart.art
           year: "2026"
-          # Column 34 is the week beginning Sunday 23 August 2026 — the day
-          # this plan started. Thirteen columns from there ends on 21 November,
-          # which leaves fifty days of slack before the year does.
+          # Column 35 is the week beginning Sunday 30 August 2026. Eleven
+          # columns from there ends on 14 November, which leaves forty-seven
+          # days of slack before the year does — a plan that lands on the 31st
+          # has no room for a week of illness.
+          #
+          # Not column 34, the week this plan was made in. Today already had
+          # contributions on it and the picture's top-left corner is dark, so
+          # starting there would have opened with a hole that nothing takes
+          # away. The first column the picture can have is the first one still
+          # entirely in the future.
           #
           # Keep this fixed: the plan is these inputs, and changing one
           # compares against a different plan.
-          start-week: "34"
+          start-week: "35"
           # No `background` and no `top`. Both place letters on rows and shade
           # the field behind them; a picture names its own shade for every
           # day, and mossaic-art refuses them rather than ignoring them.
