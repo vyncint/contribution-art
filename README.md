@@ -26,13 +26,14 @@ Exactly the four steps in [mossaic's action guide][guide]:
 1. A public repository — free Actions minutes, nothing else in it.
 2. `.github/workflows/track.yml`, copied from [`track.example.yml`][example]
    with the `with:` block edited.
-3. No secrets. The issue-comment route needs none; the Slack, Discord and
-   email steps are still in the file but gated behind repository variables
-   (`SLACK_ENABLED`, `DISCORD_ENABLED`, `EMAIL_ENABLED`), so turning one on is
-   a switch and a secret rather than an edit.
-4. Run once by hand from the Actions tab, rather than waiting for tomorrow.
+3. No secrets. The issue-comment route needs none; the Slack, Discord,
+   email and auto-commit steps are in the file but gated behind repository
+   variables (`SLACK_ENABLED`, `DISCORD_ENABLED`, `EMAIL_ENABLED`,
+   `AUTO_COMMIT_ENABLED`), so turning one on is a switch rather than an edit.
+4. Run once by hand from the Actions tab (with optional `auto_commit` checkbox),
+   rather than waiting for tomorrow.
 
-The action is pinned to `vyncint/mossaic/action@v0.1.1`, not `@main`, so it
+The action is pinned to `vyncint/mossaic/action@v0.5.0`, not `@main`, so it
 changes when I say so.
 
 ## Two things GitHub does that will bite you
