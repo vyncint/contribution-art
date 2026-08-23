@@ -9,6 +9,11 @@ name: verify
 # report against itself rather than against a recorded string, because the
 # numbers legitimately change every day this repository is committed to.
 #
+# Two of the cases draw a *picture* rather than text, which is what 0.6 added.
+# They run the same assertions unchanged, which is the claim worth checking: a
+# picture is the same plan underneath, so every output means what it meant for
+# text or the generalisation leaked.
+#
 # The cross-check is the point: every flat output is derived from the same
 # report as `json`, so the two disagreeing is a bug in the action's output
 # plumbing that no unit test in mossaic would see. That plumbing is 20
@@ -72,11 +77,30 @@ jobs:
             start-week: "1"
             background: "0"
             top: "1"
+          # A picture rather than text, which is the whole of what 0.6 added to
+          # the action. Every assertion below is unchanged for it: a picture is
+          # the same plan underneath, so the twenty outputs mean what they
+          # always meant. `background` and `top` are left at their defaults on
+          # purpose -- the action refuses them with a picture, and a case that
+          # passed them would be testing the refusal instead of the drawing.
+          - name: a template, not text
+            template: dragon
+            year: "2026"
+            start-week: ""
+            background: "0"
+            top: "1"
+          - name: a template on a quiet year
+            template: dragon
+            year: "2015"
+            start-week: ""
+            background: "0"
+            top: "1"
     steps:
       - id: art
-        uses: vyncint/mossaic/action@v0.5.0
+        uses: vyncint/mossaic/action@v0.6.0
         with:
           text: ${{ matrix.text }}
+          template: ${{ matrix.template }}
           year: ${{ matrix.year }}
           start-week: ${{ matrix.start-week }}
           background: ${{ matrix.background }}
