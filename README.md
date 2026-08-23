@@ -8,26 +8,31 @@ The plan being tracked:
 
 | | |
 | --- | --- |
-| picture | [`heart.art`](heart.art) — 7 rows × 13 columns |
+| picture | [`heart.art`](heart.art) — 7 rows × 11 columns |
 | year | 2026 |
-| placement | from week 34: Sunday 23 August to 21 November |
+| placement | from week 35: Sunday 30 August to 14 November |
 | shades | 0 and 2 — empty, and a mid green |
 | timezone | Asia/Ho_Chi_Minh |
 
 ```
-··████·████··
-·███████████·
-·███████████·
-·███████████·
-··█████████··
-····█████····
-······█······
+·████·████·
+███████████
+███████████
+███████████
+·█████████·
+···█████···
+·····█·····
 ```
 
-56 days at 37 contributions each, and 35 days inside the picture that have to
-stay dark. It finishes on **11 November**, which leaves fifty days of slack
-before the year does — a plan that lands on 31 December has no room for a week
-of illness.
+56 days at 35 contributions each — **1,960 in total** — and 21 days inside the
+picture that have to stay dark. The last one falls on **11 November**, which
+leaves fifty days of slack before the year does: a plan that lands on
+31 December has no room for a week of illness.
+
+It does **not** start in the week this plan was made. That week already had
+contributions on it, and the picture's top-left corner is dark, so starting
+there would have opened with a hole that nothing takes away. The first column
+a picture can have is the first one still entirely in the future.
 
 **The plan is those inputs.** Changing `start-week` mid-year compares against a
 *different* plan and reports nonsense confidently, so it stays fixed until the
@@ -50,7 +55,7 @@ however carefully it is drawn. Level 0 against level 2 is ΔE 50: unmistakable.
 
 It is also what makes this affordable. This graph's 2026 peak is 137, so a
 level-4 day costs 110 contributions and a level-2 day costs 37. The same heart
-in bright green would owe about 4,500 contributions instead of 2,072 — four
+in bright green would owe about 4,400 contributions instead of 1,960 — four
 times this account's existing daily pace rather than roughly matching it.
 
 ## How it was set up
