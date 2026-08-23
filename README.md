@@ -8,16 +8,50 @@ The plan being tracked:
 
 | | |
 | --- | --- |
-| text | `VYNCINT` |
+| picture | [`heart.art`](heart.art) — 7 rows × 13 columns |
 | year | 2026 |
-| placement | from week 6, rows Mon–Fri |
-| background | level 1 — the field the letters sit on |
+| placement | from week 34: Sunday 23 August to 21 November |
+| shades | 0 and 2 — empty, and a mid green |
 | timezone | Asia/Ho_Chi_Minh |
 
-**The plan is those inputs.** Changing `start-week` or `background` mid-year
-compares against a *different* plan and reports nonsense confidently, so they
-stay fixed until the year is over. The report prints the placement it used on
-its second line; if that ever changes, so did the plan.
+```
+··████·████··
+·███████████·
+·███████████·
+·███████████·
+··█████████··
+····█████····
+······█······
+```
+
+56 days at 37 contributions each, and 35 days inside the picture that have to
+stay dark. It finishes on **11 November**, which leaves fifty days of slack
+before the year does — a plan that lands on 31 December has no room for a week
+of illness.
+
+**The plan is those inputs.** Changing `start-week` mid-year compares against a
+*different* plan and reports nonsense confidently, so it stays fixed until the
+year is over. The report prints the placement it used on its second line; if
+that ever changes, so did the plan.
+
+### Why a picture and not text
+
+A letter is five rows on Mon–Fri, two shades, and it has to fit the 5×5 font.
+This is seven rows — the weekend included — thirteen columns, and any of
+GitHub's shades per day. `matrix:` points the action at the `.art` file in this
+repository, which is why the workflow now checks out the repo before running.
+
+### Why two shades and not five
+
+GitHub's five greens are not evenly spaced. Every *adjacent* pair is 9–20 ΔE
+apart in the worst palette it ships, which is close enough to read as one
+colour — so a picture using all five puts near-identical greens side by side
+however carefully it is drawn. Level 0 against level 2 is ΔE 50: unmistakable.
+
+It is also what makes this affordable. This graph's 2026 peak is 137, so a
+level-4 day costs 110 contributions and a level-2 day costs 37. The same heart
+in bright green would owe about 4,500 contributions instead of 2,072 — four
+times this account's existing daily pace rather than roughly matching it.
 
 ## How it was set up
 
@@ -33,8 +67,8 @@ Exactly the four steps in [mossaic's action guide][guide]:
 4. Run once by hand from the Actions tab (with optional `auto_commit` checkbox),
    rather than waiting for tomorrow.
 
-The action is pinned to `vyncint/mossaic/action@v0.5.0`, not `@main`, so it
-changes when I say so.
+The action is pinned to `vyncint/mossaic/action@v0.6.0`, not `@main`, so it
+changes when I say so. `matrix:` arrived in 0.6.0.
 
 ## Two things GitHub does that will bite you
 
@@ -49,10 +83,15 @@ changes when I say so.
 ## Reading the report
 
 `drawn` means finished. `reachable` means there is work left but nothing in
-the way. `holed` means days inside the letters already have contributions, and
-nothing takes those away — the text would read with holes in it. That last one
-is not a warning to work harder; it is the year telling you it cannot be drawn
-cleanly, and the report suggests a placement that would leave fewer holes.
+the way. `holed` means days inside the picture are already brighter than it
+wants, and nothing takes a contribution away — the heart would read with holes
+in it.
+
+For a picture that is two kinds of damage rather than one: a day meant to stay
+**dark** that has any contribution at all, and a day meant to be **level 2**
+that has crept past 73 and would render as level 4. Both are permanent. The
+plan starts today precisely so that neither has had a chance to happen yet —
+every day it covers is still in the future.
 
 [mossaic]: https://github.com/vyncint/mossaic
 [guide]: https://github.com/vyncint/mossaic/blob/main/action/README.md

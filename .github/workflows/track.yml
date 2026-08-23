@@ -1,5 +1,9 @@
 # Tracks a contribution-art plan daily and comments the report on issue #1.
 #
+# The plan is a heart across the closing weeks of 2026: seven rows by
+# thirteen columns, drawn from Sunday 23 August to 21 November. See
+# heart.art, which is the picture itself and readable as one.
+#
 # Copied from vyncint/mossaic action/track.example.yml with the `with:` block
 # edited; the channels needing secrets are left in, gated off by repository
 # variables, so turning one on is a switch rather than an edit.
@@ -28,19 +32,30 @@ jobs:
   track:
     runs-on: ubuntu-latest
     steps:
+      # `matrix` is a path in this repository, so the picture has to be
+      # checked out before the action can read it.
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - id: art
         uses: vyncint/mossaic/action@v0.6.0
         with:
-          text: VYNCINT
+          # The picture, seven rows by thirteen columns. `matrix` rather than
+          # `text` because a heart is not a letter: it uses the whole week,
+          # weekend included, which the 5x5 font cannot do.
+          matrix: heart.art
           year: "2026"
-          # Keep this fixed for the whole year: the plan is these inputs, and
-          # changing one compares against a different plan.
-          start-week: "6"
-          # Draw the background as a shade rather than leaving it empty, so
-          # you can keep contributing every day. 0 = empty (the default), and
-          # leave two levels between this and the letters' 4 — so 1 or 2.
-          # Fixed for the whole year, like start-week: it is part of the plan.
-          background: "1"
+          # Column 34 is the week beginning Sunday 23 August 2026 — the day
+          # this plan started. Thirteen columns from there ends on 21 November,
+          # which leaves fifty days of slack before the year does.
+          #
+          # Keep this fixed: the plan is these inputs, and changing one
+          # compares against a different plan.
+          start-week: "34"
+          # No `background` and no `top`. Both place letters on rows and shade
+          # the field behind them; a picture names its own shade for every
+          # day, and mossaic-art refuses them rather than ignoring them.
           timezone: Asia/Ho_Chi_Minh
           # `behind` fails the job when today is a letter day and is short, so
           # the failure notification you already get does the reminding.
