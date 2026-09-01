@@ -1,8 +1,12 @@
 # contribution-art
 
 A tracker for a [mossaic] contribution-art plan. There is no code here: one
-scheduled workflow asks GitHub what has actually been contributed, compares it
-against the plan, and posts the report to [issue #1](../../issues/1).
+workflow asks GitHub what has actually been contributed, compares it against
+the plan, and posts the report to [issue #1](../../issues/1).
+
+**The schedule is currently off.** The cron block in
+[`track.yml`](.github/workflows/track.yml) is commented out, so the tracker
+reports only when it is dispatched by hand from the Actions tab.
 
 The plan being tracked:
 
@@ -80,7 +84,8 @@ changes when I say so. `matrix:` arrived in 0.6.0.
 - **A scheduled workflow in a public repository is disabled after 60 days
   without commits.** GitHub emails first. A repository whose only job is a
   daily cron will hit this; push something occasionally, or re-enable it from
-  the Actions tab.
+  the Actions tab. Moot while the cron above is commented out, and waiting
+  for you again the day it is restored.
 - **`cron` is UTC, always.** `0 1 * * *` is 08:00 in UTC+7. That is why
   `timezone:` is set — otherwise the day the report calls "today" disagrees
   with the day the graph shades.

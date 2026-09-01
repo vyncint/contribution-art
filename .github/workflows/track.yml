@@ -1,4 +1,4 @@
-# Tracks a contribution-art plan daily and comments the report on issue #1.
+# Tracks a contribution-art plan and comments the report on issue #1.
 #
 # The plan is a heart across the closing weeks of 2026: seven rows by
 # eleven columns, drawn from Sunday 30 August to 14 November. See
@@ -7,14 +7,18 @@
 # Copied from vyncint/mossaic action/track.example.yml with the `with:` block
 # edited; the channels needing secrets are left in, gated off by repository
 # variables, so turning one on is a switch rather than an edit.
+#
+# Dispatch-only: the twice-daily schedule is commented out in `on:` below, so
+# the plan is tracked when this workflow is run by hand and not otherwise.
 name: contribution art
 
 on:
-  schedule:
-    # UTC. 01:00 UTC is 08:00 in UTC+7 — morning report.
-    - cron: "0 1 * * *"
-    # 16:30 UTC is 23:30 in UTC+7 — late evening check & auto-commit.
-    - cron: "30 16 * * *"
+  # Scheduled runs are disabled. Uncomment the block below to restore them.
+  # schedule:
+  #   # UTC. 01:00 UTC is 08:00 in UTC+7 — morning report.
+  #   - cron: "0 1 * * *"
+  #   # 16:30 UTC is 23:30 in UTC+7 — late evening check & auto-commit.
+  #   - cron: "30 16 * * *"
   # So you can run it now instead of waiting for tomorrow, with optional auto-commit.
   workflow_dispatch:
     inputs:
