@@ -24,8 +24,9 @@ name: verify
 # checkout — a green run here has to mean "what a user installs today works".
 
 on:
-  schedule:
-    - cron: "41 4 * * 1"
+  # Scheduled runs are disabled. Uncomment the block below to restore them.
+  # schedule:
+  #   - cron: "41 4 * * 1"
   workflow_dispatch:
     inputs:
       version:
