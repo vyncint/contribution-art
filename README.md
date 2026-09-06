@@ -76,7 +76,7 @@ Exactly the four steps in [mossaic's action guide][guide]:
 4. Run once by hand from the Actions tab (with optional `auto_commit` checkbox),
    rather than waiting for tomorrow.
 
-The action is pinned to `vyncint/mossaic/action@v0.6.0`, not `@main`, so it
+The action is pinned to `vyncint/mossaic/action@v0.7.0`, not `@main`, so it
 changes when I say so. `matrix:` arrived in 0.6.0.
 
 ## Two things GitHub does that will bite you
