@@ -50,20 +50,31 @@ jobs:
           # weekend included, which the 5x5 font cannot do.
           matrix: heart.art
           year: "2026"
-          # Column 35 is the week beginning Sunday 30 August 2026. Eleven
-          # columns from there ends on 14 November, which leaves forty-seven
-          # days of slack before the year does — a plan that lands on the 31st
-          # has no room for a week of illness.
+          # Column 37 is the week beginning Sunday 13 September 2026. Eleven
+          # columns from there ends on 28 November, and the last *lit* day is
+          # 25 November, which leaves thirty-six days of slack before the year
+          # does — a plan that lands on the 31st has no room for a week of
+          # illness.
           #
-          # Not column 34, the week this plan was made in. Today already had
-          # contributions on it and the picture's top-left corner is dark, so
-          # starting there would have opened with a hole that nothing takes
-          # away. The first column the picture can have is the first one still
-          # entirely in the future.
+          # Moved from 35 on 2026-09-06, and this is the one edit the rule
+          # below is meant to prevent, so it is worth saying why. Week 35
+          # began 30 August, and between the plan being made and that week
+          # arriving, five days inside the picture picked up ordinary
+          # contributions — four of them on days the heart needs dark, which
+          # nothing takes away. The plan became `holed`: not "behind", but
+          # "cannot be drawn cleanly at all, however much you contribute".
+          #
+          # Week 37 is the earliest placement that holes nothing, and it
+          # begins on a Sunday still entirely in the future — the same rule
+          # that ruled out week 34 originally. 37 through 42 are all clean and
+          # all cost the same; 37 keeps the most slack, and 42 is the last
+          # that fits inside the year.
           #
           # Keep this fixed: the plan is these inputs, and changing one
-          # compares against a different plan.
-          start-week: "35"
+          # compares against a different plan. This edit restarts the plan on
+          # purpose; the numbers in the next report are not comparable with
+          # the ones before it.
+          start-week: "37"
           # No `background` and no `top`. Both place letters on rows and shade
           # the field behind them; a picture names its own shade for every
           # day, and mossaic-art refuses them rather than ignoring them.
