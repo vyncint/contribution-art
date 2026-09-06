@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
 
       - id: art
-        uses: vyncint/mossaic/action@v0.6.0
+        uses: vyncint/mossaic/action@v0.7.0
         with:
           # The picture, seven rows by thirteen columns. `matrix` rather than
           # `text` because a heart is not a letter: it uses the whole week,
@@ -72,7 +72,7 @@ jobs:
           # the failure notification you already get does the reminding.
           fail-on: never
           # Which mossaic release does the tracking. The default, latest,
-          # follows crates.io; pin a number ("0.5.0") to freeze it. Left on
+          # follows crates.io; pin a number ("0.7.0") to freeze it. Left on
           # latest deliberately: this repository is where a mossaic release
           # gets exercised against a real contribution graph, so following
           # the newest published version is the point of it.
