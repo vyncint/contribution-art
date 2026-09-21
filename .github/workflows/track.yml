@@ -50,20 +50,39 @@ jobs:
           # weekend included, which the 5x5 font cannot do.
           matrix: heart.art
           year: "2026"
-          # Column 35 is the week beginning Sunday 30 August 2026. Eleven
-          # columns from there ends on 14 November, which leaves forty-seven
-          # days of slack before the year does — a plan that lands on the 31st
-          # has no room for a week of illness.
+          # Column 39 is the week beginning Sunday 27 September 2026. Eleven
+          # columns from there ends on 12 December, and the last *lit* day is
+          # 9 December, which leaves twenty-two days of slack before the year
+          # does — a plan that lands on the 31st has no room for a week of
+          # illness.
           #
-          # Not column 34, the week this plan was made in. Today already had
-          # contributions on it and the picture's top-left corner is dark, so
-          # starting there would have opened with a hole that nothing takes
-          # away. The first column the picture can have is the first one still
-          # entirely in the future.
+          # Moved from 35 on 2026-09-06 and from 37 on 2026-09-21, and this is
+          # the one edit the rule below is meant to prevent, so it is worth
+          # saying why — twice, for the same reason. Week 35 began 30 August,
+          # and between the plan being made and that week arriving, five days
+          # inside the picture picked up ordinary contributions — four of them
+          # on days the heart needs dark, which nothing takes away. The plan
+          # became `holed`: not "behind", but "cannot be drawn cleanly at all,
+          # however much you contribute".
+          #
+          # Week 37 was the earliest clean placement *on 6 September*. It was
+          # not landed that day, and by 21 September it was holed by four days
+          # and 38 by one. The rule was never wrong; the gap between choosing
+          # a placement and merging it is enough for the future to become the
+          # past. A placement is only safe on the day it is measured, so
+          # measure it on the day it lands: `mossaic-art --matrix heart.art
+          # --year 2026 --start-week N --track vyncint` names the earliest
+          # clean N in its own output.
+          #
+          # Week 39 is that N today. 39 through 42 are all clean and all cost
+          # the same; 39 keeps the most slack, and 42 is the last that fits
+          # inside the year.
           #
           # Keep this fixed: the plan is these inputs, and changing one
-          # compares against a different plan.
-          start-week: "35"
+          # compares against a different plan. This edit restarts the plan on
+          # purpose; the numbers in the next report are not comparable with
+          # the ones before it.
+          start-week: "39"
           # No `background` and no `top`. Both place letters on rows and shade
           # the field behind them; a picture names its own shade for every
           # day, and mossaic-art refuses them rather than ignoring them.
