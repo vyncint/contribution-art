@@ -14,7 +14,7 @@ The plan being tracked:
 | --- | --- |
 | picture | [`heart.art`](heart.art) — 7 rows × 11 columns |
 | year | 2026 |
-| placement | from week 37: Sunday 13 September to 28 November |
+| placement | from week 39: Sunday 27 September to 12 December |
 | shades | 0 and 2 — empty, and a mid green |
 | timezone | Asia/Ho_Chi_Minh |
 
@@ -38,20 +38,28 @@ contributions on it, and the picture's top-left corner is dark, so starting
 there would have opened with a hole that nothing takes away. The first column
 a picture can have is the first one still entirely in the future.
 
-**It started at week 35 and moved to 37 on 6 September 2026**, which is the
-one edit the rule below is meant to prevent, so it is worth recording why.
+**It started at week 35, moved to 37 on 6 September 2026, and to 39 on 21
+September**, which is the one edit the rule below is meant to prevent, so it
+is worth recording why — twice, for the same reason.
+
 Week 35 began on 30 August, and in the days between the plan being made and
 that week arriving, five days inside the picture picked up ordinary
 contributions — four of them on days the heart needs dark. Nothing takes a
 contribution away, so the plan was not *behind*, it was `holed`: it could not
 be drawn cleanly at that placement however much was contributed afterwards.
-Week 37 is the earliest placement that holes nothing. The numbers in reports
-from before that date describe a different plan and are not comparable.
+
+Week 37 was the earliest placement that holed nothing **on 6 September**. It
+was not merged that day, and by 21 September it was holed too — four days
+brighter than the picture wants — and so was 38, by one day. That is the
+failure repeating rather than a new one: a placement is only in the future
+until it isn't, and the gap between choosing one and landing it is enough.
+Week 39 is the earliest that holes nothing today. The numbers in reports from
+before each move describe a different plan and are not comparable.
 
 **The plan is those inputs.** Changing `start-week` mid-year compares against a
 *different* plan and reports nonsense confidently, so it stays fixed until the
 year is over. The report prints the placement it used **in its header** — `### Heart · 2026
-· week 37, 11 columns` — and the action exposes it as the `start-week` and
+· week 39, 11 columns` — and the action exposes it as the `start-week` and
 `columns` outputs; if either ever changes, so did the plan.
 
 ### Why a picture and not text
